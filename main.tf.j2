@@ -4,7 +4,7 @@ resource "google_container_cluster" "primary" {
   location = "{{ tfvar.region }}"
 
   remove_default_node_pool = true
-  initial_node_count       = "{{ tfvar.gke.initial_node_count }}"
+  initial_node_count       = {{ tfvar.gke.initial_node_count }}
 
   network    = "{{ tfvar.project }}-vpc"
   subnetwork = "{{ tfvar.project }}-subnet"
@@ -24,7 +24,7 @@ resource "google_container_node_pool" "primary_nodes" {
   name       = "${google_container_cluster.primary.name}-node-pool"
   location   = "{{ tfvar.region }}"
   cluster    = google_container_cluster.primary.name
-  node_count = "{{ tfvar.gke.node_count }}"
+  node_count = {{ tfvar.gke.node_count }}
 
   node_config {
     oauth_scopes = [
