@@ -1,3 +1,9 @@
+provider "google" {
+  project     = "{{ tfvar.project }}"
+  region      = "{{ tfvar.region }}"
+  credentials = file("{{ tfvar.credentials }}")
+}
+
 # GKE cluster
 resource "google_container_cluster" "primary" {
   name     = "{{ tfvar.project }}-gke"
