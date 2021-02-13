@@ -6,8 +6,8 @@ resource "google_container_cluster" "primary" {
   remove_default_node_pool = true
   initial_node_count       = "{{ tfvar.gke.initial_node_count }}"
 
-  network    = google_compute_network.vpc.name
-  subnetwork = google_compute_subnetwork.subnet.name
+  network    = "{{ tfvar.vpc.resource_name }}"
+  subnetwork = "{{ tfvar.vpc.subnet.google_compute_subnetwork.name }}" 
 
   master_auth {
     username = "{{ tfvar.gke.username }}"
