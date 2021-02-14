@@ -35,7 +35,12 @@ resource "google_container_node_pool" "{{ tfvars.app }}" {
   location    = "{{ tfvars.region }}"
   cluster     = "{{ tfvars.app }}-gke"
   node_count  = {{ tfvars.node_count }}
-  autoscaling = {{ tfvars.autoscaling }}
+
+  autoscaling {
+    max_node_count = {{ tfvars.autocaling.max_node_count }}
+    min_node_count = {{ tfvars.autocaling.min_node_count }}
+  }
+
   node_config {
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
