@@ -1,19 +1,19 @@
 provider "google" {
-  project     = "{{ tfvar.project }}"
-  region      = "{{ tfvar.region }}"
-  credentials = file("{{ tfvar.credentials }}")
+  project     = "{{ tfvars.project_id }}"
+  region      = "{{ tfvars.region }}"
+  credentials = file("{{ tfvars.credentials }}")
 }
 
 # GKE cluster
-resource "google_container_cluster" "primary" {
-  name     = "{{ tfvar.project }}-gke"
-  location = "{{ tfvar.region }}"
+resource "google_container_cluster" "{{ tfvars.project }}" {
+  name     = "{{ tfvars.project }}-gke"
+  location = "{{ tfvars.region }}"
 
   remove_default_node_pool = true
-  initial_node_count       = {{ tfvar.gke.initial_node_count }}
+  initial_node_count       = {{ tfvars.gke.initial_node_count }}
 
-  network    = "{{ tfvar.project }}-vpc"
-  subnetwork = "{{ tfvar.project }}-subnet"
+  network    = "{{ tfvars.project }}-vpc"
+  subnetwork = "{{ tfvars.project }}-subnet"
 
   master_auth {
     username = ""
@@ -26,11 +26,11 @@ resource "google_container_cluster" "primary" {
 }
 
 # Separately Managed Node Pool
-resource "google_container_node_pool" "primary_nodes" {
-  name       = "${google_container_cluster.primary.name}-node-pool"
-  location   = "{{ tfvar.region }}"
-  cluster    = google_container_cluster.primary.name
-  node_count = {{ tfvar.gke.node_count }}
+resource "google_container_node_pool" "{{ tfvars.project }}" {
+  name       = "{{ tfvars.project }}-gke-node-pool"
+  location   = "{{ tfvars.region }}"
+  cluster    = "{{ tfvars.project }}-gke"
+  node_count = {{ tfvars.gke.node_count }}
 
   node_config {
     oauth_scopes = [
@@ -39,12 +39,12 @@ resource "google_container_node_pool" "primary_nodes" {
     ]
 
     labels = {
-      env = "{{ tfvar.project }}"
+      env = "{{ tfvars.project }}"
     }
 
     # preemptible  = true
-    machine_type = "{{ tfvar.gke.machine_type }}"
-    tags         = ["gke-node", "{{ tfvar.project }}-gke"]
+    machine_type = "{{ tfvars.gke.machine_type }}"
+    tags         = ["gke-node", "{{ tfvars.project }}-gke"]
     metadata = {
       disable-legacy-endpoints = "true"
     }
