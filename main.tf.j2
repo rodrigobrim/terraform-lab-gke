@@ -31,11 +31,11 @@ resource "google_container_node_pool" "{{ tfvars.app }}" {
     google_container_cluster.{{ tfvars.app }},
   ]
 
-  name       = "{{ tfvars.app }}-gke-node-pool"
-  location   = "{{ tfvars.region }}"
-  cluster    = "{{ tfvars.app }}-gke"
-  node_count = {{ tfvars.node_count }}
-
+  name        = "{{ tfvars.app }}-gke-node-pool"
+  location    = "{{ tfvars.region }}"
+  cluster     = "{{ tfvars.app }}-gke"
+  node_count  = {{ tfvars.node_count }}
+  autoscaling = {{ tfvars.autoscaling }}
   node_config {
     oauth_scopes = [
       "https://www.googleapis.com/auth/logging.write",
