@@ -37,8 +37,8 @@ resource "google_container_node_pool" "{{ tfvars.app }}" {
   node_count  = {{ tfvars.node_count }}
 
   autoscaling {
-    max_node_count = {{ tfvars.autocaling.max_node_count }}
-    min_node_count = {{ tfvars.autocaling.min_node_count }}
+    max_node_count = {{ tfvars.autoscaling.max_node_count }}
+    min_node_count = {{ tfvars.autoscaling.min_node_count }}
   }
 
   node_config {
