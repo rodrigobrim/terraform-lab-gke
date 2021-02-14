@@ -5,8 +5,8 @@ provider "google" {
 }
 
 # GKE cluster
-resource "google_container_cluster" "{{ tfvars.project }}" {
-  name     = "{{ tfvars.project }}-gke"
+resource "google_container_cluster" "{{ tfvars.app }}" {
+  name     = "{{ tfvars.app }}-gke"
   location = "{{ tfvars.region }}"
 
   remove_default_node_pool = true
@@ -26,10 +26,14 @@ resource "google_container_cluster" "{{ tfvars.project }}" {
 }
 
 # Separately Managed Node Pool
-resource "google_container_node_pool" "{{ tfvars.project }}" {
-  name       = "{{ tfvars.project }}-gke-node-pool"
+resource "google_container_node_pool" "{{ tfvars.app }}" {
+  depends_on = [
+    google_container_cluster.{{ tfvars.app }},
+  ]
+
+  name       = "{{ tfvars.app }}-gke-node-pool"
   location   = "{{ tfvars.region }}"
-  cluster    = "{{ tfvars.project }}-gke"
+  cluster    = "{{ tfvars.app }}-gke"
   node_count = {{ tfvars.node_count }}
 
   node_config {
@@ -39,12 +43,12 @@ resource "google_container_node_pool" "{{ tfvars.project }}" {
     ]
 
     labels = {
-      env = "{{ tfvars.project }}"
+      env = "{{ tfvars.app }}"
     }
 
     # preemptible  = true
     machine_type = "{{ tfvars.machine_type }}"
-    tags         = ["gke-node", "{{ tfvars.project }}-gke"]
+    tags         = ["gke-node", "{{ tfvars.app }}-gke"]
     metadata = {
       disable-legacy-endpoints = "true"
     }
