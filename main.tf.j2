@@ -62,7 +62,7 @@ resource "google_container_node_pool" "{{ tfvars.app }}" {
 
 output "name" {
   description = "cluster_id"
-  value       = google_container_cluster.id
+  value       = google_container_cluster.{{ tfvars.app }}.id
 
   depends_on = [
     google_container_cluster.{{ tfvars.app }},
@@ -72,7 +72,7 @@ output "name" {
 
 output "endpoint" {
   description = "cluster_endpoint"
-  value       = google_container_cluster.endpoint
+  value       = google_container_cluster.{{ tfvars.app }}.endpoint
 
   depends_on = [
     google_container_cluster.{{ tfvars.app }},
