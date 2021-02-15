@@ -60,7 +60,7 @@ resource "google_container_node_pool" "{{ tfvars.app }}" {
   }
 }
 
-output "name" {
+output "id" {
   description = "cluster_id"
   value       = google_container_cluster.{{ tfvars.app }}.id
 
